@@ -105,22 +105,22 @@ function CellButton({ active, label, subLabel, onClick, onDoubleClick, onContext
       onDoubleClick={onDoubleClick}
       onContextMenu={onContextMenu}
       onMouseDown={onMouseDown}
-      className={`flex h-8 min-w-8 flex-col items-center justify-center rounded-md border text-[10px] leading-none transition ${
+      className={`flex h-8 min-w-8 flex-col items-center justify-center rounded-md border text-[12px] font-medium leading-none transition ${
         active ? "border-slate-900 bg-slate-900 text-white" : "border-slate-300 bg-white hover:bg-slate-50"
       } ${className}`}
     >
       <span>{label}</span>
-      {subLabel ? <span className="mt-0.5 text-[8px] opacity-80">{subLabel}</span> : null}
+      {subLabel ? <span className="mt-0.5 text-[10px] opacity-80">{subLabel}</span> : null}
     </button>
   );
 }
 
 function RowTimeHeader() {
   return (
-    <div className="grid grid-cols-[64px_repeat(24,minmax(28px,1fr))] gap-1 text-[10px] font-medium text-slate-600">
+    <div className="grid grid-cols-[74px_repeat(24,minmax(36px,1fr))] gap-1 text-[12px] font-semibold text-slate-700">
       <div />
       {HOURS.map((hour) => (
-        <div key={hour} className={`flex h-7 items-center justify-center rounded-md border ${groupClass(hour)}`}>
+        <div key={hour} className={`flex h-8 items-center justify-center rounded-md border ${groupClass(hour)}`}>
           {hour}
         </div>
       ))}
@@ -130,8 +130,8 @@ function RowTimeHeader() {
 
 function CompactNumberRow({ label, grid, setGrid }) {
   return (
-    <div className="grid grid-cols-[64px_repeat(24,minmax(28px,1fr))] gap-1 items-center">
-      <div className="text-sm font-medium">{label}</div>
+    <div className="grid grid-cols-[74px_repeat(24,minmax(36px,1fr))] gap-1 items-center">
+      <div className="text-base font-semibold">{label}</div>
       {HOURS.map((hour) => (
         <Input
           key={hour}
@@ -141,7 +141,7 @@ function CompactNumberRow({ label, grid, setGrid }) {
             next[hour] = { value: e.target.value };
             setGrid(next);
           }}
-          className={`h-8 px-1 text-center text-[11px] ${groupClass(hour)}`}
+          className={`h-10 px-1.5 text-center text-[12px] font-medium ${groupClass(hour)}`}
         />
       ))}
     </div>
@@ -150,8 +150,8 @@ function CompactNumberRow({ label, grid, setGrid }) {
 
 function CompactEventRow({ label, cells }) {
   return (
-    <div className="grid grid-cols-[64px_repeat(24,minmax(28px,1fr))] gap-1 items-center">
-      <div className="text-sm font-medium">{label}</div>
+    <div className="grid grid-cols-[74px_repeat(24,minmax(36px,1fr))] gap-1 items-center">
+      <div className="text-base font-semibold">{label}</div>
       {cells}
     </div>
   );
@@ -161,7 +161,7 @@ export default function MonitoringChartMVP() {
   const [resetKey, setResetKey] = useState(0);
   const [weights, setWeights] = useState([""]);
   const [vigor, setVigor] = useState("S0");
-  const [tempGrid, setTempGrid] = useState(initialNumberGrid);
+    const [tempGrid, setTempGrid] = useState(initialNumberGrid);
   const [bpGrid, setBpGrid] = useState(initialNumberGrid);
   const [rrGrid, setRrGrid] = useState(initialNumberGrid);
   const [stoolGrid, setStoolGrid] = useState(initialStoolGrid);
@@ -417,21 +417,21 @@ export default function MonitoringChartMVP() {
     setRespiratoryModalCustom("");
   };
 
-  return (
-    <div key={resetKey} className="min-h-screen bg-slate-100 p-3">
-      <div className="mx-auto grid max-w-[1400px] gap-3 xl:grid-cols-[1.5fr_0.5fr]">
-        <Card className="rounded-2xl shadow-sm">
+    return (
+    <div key={resetKey} className="min-h-screen bg-slate-100 p-6 text-base text-slate-900 antialiased">
+      <div className="mx-auto grid max-w-[1600px] items-stretch gap-4 xl:grid-cols-[1.4fr_0.6fr]">
+        <Card className="rounded-2xl shadow-sm p-2">
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-lg">주야간 모니터링 입력</CardTitle>
+              <CardTitle className="text-xl font-semibold">주야간 모니터링 입력</CardTitle>
               <Button variant="outline" className="h-9" onClick={handleReset}>
                 초기화
               </Button>
             </div>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="flex flex-wrap items-center gap-2 rounded-xl border bg-slate-50 p-3">
-              <div className="w-14 text-sm font-medium">체중</div>
+            <div className="flex flex-wrap items-center gap-3 rounded-xl border bg-slate-50 p-4">
+              <div className="w-14 text-base font-semibold text-slate-900">체중</div>
               {weights.map((w, idx) => (
                 <div key={idx} className="flex items-center gap-1">
                   <Input
@@ -442,7 +442,7 @@ export default function MonitoringChartMVP() {
                       next[idx] = e.target.value;
                       setWeights(next);
                     }}
-                    className="h-8 w-20"
+                    className="h-10 w-48 text-base font-medium"
                   />
                   {weights.length > 1 && (
                     <Button
@@ -461,14 +461,14 @@ export default function MonitoringChartMVP() {
               </Button>
             </div>
 
-            <div className="flex flex-wrap items-center gap-2 rounded-xl border bg-slate-50 p-3">
-              <div className="w-14 text-sm font-medium">활력</div>
+            <div className="flex flex-wrap items-center gap-3 rounded-xl border bg-slate-50 p-4">
+              <div className="w-14 text-base font-semibold text-slate-900">활력</div>
               {vigorOptions.map((option) => (
                 <Button
                   key={option.code}
                   title={option.desc}
                   variant={vigor === option.code ? "default" : "outline"}
-                  className="h-8 min-w-12 px-2 text-xs"
+                  className="h-10 min-w-14 px-3 text-sm font-semibold"
                   onClick={() => setVigor(option.code)}
                 >
                   {option.code}
@@ -476,8 +476,8 @@ export default function MonitoringChartMVP() {
               ))}
             </div>
 
-            <div className="overflow-x-auto rounded-xl border bg-white p-2.5">
-              <div className="min-w-[880px] space-y-1.5">
+            <div className="overflow-x-auto rounded-xl border bg-white p-4">
+              <div className="min-w-[1040px] space-y-2">
                 <RowTimeHeader />
                 <CompactNumberRow label="체온" grid={tempGrid} setGrid={setTempGrid} />
                 <CompactNumberRow label="혈압" grid={bpGrid} setGrid={setBpGrid} />
@@ -485,15 +485,15 @@ export default function MonitoringChartMVP() {
               </div>
             </div>
 
-            <div className="rounded-xl border bg-white p-2.5">
-              <div className="mb-2 text-sm font-medium">식욕</div>
-              <div className="grid gap-2 xl:grid-cols-3">
+            <div className="rounded-xl border bg-white p-4">
+              <div className="mb-3 text-lg font-semibold text-slate-900">식욕</div>
+              <div className="grid gap-3 xl:grid-cols-3">
                 {appetiteBlocks.map((block) => {
                   const data = appetite[block.key];
                   return (
-                    <div key={block.key} className="rounded-lg border bg-slate-50 p-2.5 space-y-1.5">
-                      <div className="text-sm font-medium">{block.label}</div>
-                      <div className="flex flex-wrap gap-2">
+                    <div key={block.key} className="rounded-lg border bg-slate-50 p-3 space-y-2">
+                      <div className="text-base font-semibold">{block.label}</div>
+                      <div className="flex items-center gap-2">
                         <Button
                           variant={data.ff ? "default" : "outline"}
                           className="h-8"
@@ -512,7 +512,7 @@ export default function MonitoringChartMVP() {
                           placeholder="예: 4am~"
                           value={data.npoNote}
                           onChange={(e) => setAppetite({ ...appetite, [block.key]: { ...data, npoNote: e.target.value } })}
-                          className="h-7 w-24"
+                          className="h-9 flex-1 min-w-0 text-base"
                         />
                       </div>
                       <div className="space-y-1">
@@ -558,7 +558,7 @@ export default function MonitoringChartMVP() {
                       </div>
                       <Button
                         variant="outline"
-                        className="h-8 w-full"
+                        className="h-10 w-full text-base font-semibold"
                         onClick={() => setAppetite({ ...appetite, [block.key]: { ...data, items: [...data.items, { score: "", food: "" }] } })}
                       >
                         <Plus className="mr-1 h-4 w-4" /> 항목 추가
@@ -569,8 +569,8 @@ export default function MonitoringChartMVP() {
               </div>
             </div>
 
-            <div className="overflow-x-auto rounded-xl border bg-white p-2.5">
-              <div className="min-w-[880px] space-y-1.5">
+            <div className="overflow-x-auto rounded-xl border bg-white p-4">
+              <div className="min-w-[1040px] space-y-2">
                 <RowTimeHeader />
                 <CompactEventRow
                   label="배변"
@@ -620,7 +620,7 @@ export default function MonitoringChartMVP() {
                     );
                   })}
                 />
-                <CompactNumberRow label="*뇨량체크" grid={urineAmountGrid} setGrid={setUrineAmountGrid} />
+                <CompactNumberRow label={<span>*뇨량<br/>특이사항</span>} grid={urineAmountGrid} setGrid={setUrineAmountGrid} />
                 <CompactEventRow
                   label="구토"
                   cells={HOURS.map((hour) => {
@@ -670,7 +670,7 @@ export default function MonitoringChartMVP() {
                   })}
                 />
               </div>
-              <div className="mt-2 text-xs text-slate-500">
+              <div className="mt-3 text-sm leading-relaxed text-slate-600">
                 배변: 좌클릭 = 스코어 순환, 우클릭 = 지우기 / 배뇨: 좌클릭 = 체크, 우클릭 = 지우기 / 구토: 좌클릭 = 선택 팝업, 우클릭 = 지우기 / 호흡기증상: 좌클릭 = 선택 팝업, 우클릭 = 지우기
               </div>
             </div>
@@ -779,14 +779,14 @@ export default function MonitoringChartMVP() {
           </div>
         )}
 
-        <Card className="sticky top-4 h-fit rounded-2xl shadow-sm">
+        <Card className="rounded-2xl shadow-sm xl:min-h-full">
           <CardHeader className="pb-3">
             <div className="flex flex-col gap-1">
-              <CardTitle className="text-lg">프리뷰 <span className="text-xs text-slate-500">(수동수정가능)</span></CardTitle>
+              <CardTitle className="text-xl font-semibold">프리뷰 <span className="text-sm text-slate-600">(수동수정가능)</span></CardTitle>
             </div>
             <div className="mt-2">
               <Button
-                className="h-9 w-full"
+                className="h-11 w-full text-base font-semibold"
                 onClick={async (e) => {
                   await copyPreview();
                   e.currentTarget.textContent = "COPY 완료";
@@ -804,7 +804,7 @@ export default function MonitoringChartMVP() {
                 setPreviewDraft(e.target.value);
                 setIsDirty(true);
               }}
-              className="min-h-[620px] font-mono text-xs"
+              className="min-h-[360px] md:min-h-[520px] xl:min-h-[980px] h-full font-mono text-sm leading-6 text-slate-900 whitespace-pre overflow-x-auto resize-none"
             />
           </CardContent>
         </Card>
