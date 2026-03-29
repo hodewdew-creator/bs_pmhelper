@@ -63,10 +63,10 @@ function hourLabel(h) {
 }
 
 function groupClass(hour) {
-  if (hour < 6) return "bg-slate-50";
-  if (hour < 12) return "bg-blue-50";
-  if (hour < 18) return "bg-emerald-50";
-  return "bg-amber-50";
+  if (hour < 6) return "bg-slate-100";
+  if (hour < 12) return "bg-blue-100";
+  if (hour < 18) return "bg-emerald-100";
+  return "bg-amber-100";
 }
 
 function initialNumberGrid() {
@@ -164,6 +164,7 @@ export default function MonitoringChartMVP() {
     const [tempGrid, setTempGrid] = useState(initialNumberGrid);
   const [bpGrid, setBpGrid] = useState(initialNumberGrid);
   const [rrGrid, setRrGrid] = useState(initialNumberGrid);
+  const [bgGrid, setBgGrid] = useState(initialNumberGrid);
   const [stoolGrid, setStoolGrid] = useState(initialStoolGrid);
   const [urineGrid, setUrineGrid] = useState(initialUrineGrid);
   const [urineAmountGrid, setUrineAmountGrid] = useState(initialNumberGrid);
@@ -211,7 +212,17 @@ export default function MonitoringChartMVP() {
       rrGrid.map((c, hour) => ({ hour, value: c.value })),
       ({ hour, value }) => `${value}(${hourLabel(hour)})`
     );
-    lines.push(`- 호흡수 : ${rrText || "X"}`);
+    if (rrText) {
+      lines.push(`- 호흡수 : ${rrText}`);
+    }
+
+    const bgText = formatTimedEntries(
+      bgGrid.map((c, hour) => ({ hour, value: c.value })),
+      ({ hour, value }) => `${value}(${hourLabel(hour)})`
+    );
+    if (bgText) {
+      lines.push(`- 혈당 : ${bgText}`);
+    }
 
     appetiteBlocks.forEach((block) => {
       const data = appetite[block.key];
@@ -271,10 +282,12 @@ export default function MonitoringChartMVP() {
         return desc ? `${hourLabel(x.hour)}(${desc})` : `${hourLabel(x.hour)}`;
       })
       .join(", ");
-    lines.push(`- 호흡기/증상 : ${respiratoryText || "X"}`);
+    if (respiratoryText) {
+      lines.push(`- 호흡기증상 : ${respiratoryText}`);
+    }
 
     return lines.join("\n");
-  }, [weights, vigor, tempGrid, bpGrid, rrGrid, appetite, stoolGrid, urineGrid, urineAmountGrid, vomitGrid, respiratoryGrid]);
+  }, [weights, vigor, tempGrid, bpGrid, rrGrid, bgGrid, appetite, stoolGrid, urineGrid, urineAmountGrid, vomitGrid, respiratoryGrid]);
 
   React.useEffect(() => {
     if (!isDirty) {
@@ -310,6 +323,7 @@ export default function MonitoringChartMVP() {
     setTempGrid(initialNumberGrid());
     setBpGrid(initialNumberGrid());
     setRrGrid(initialNumberGrid());
+    setBgGrid(initialNumberGrid());
     setStoolGrid(initialStoolGrid());
     setUrineGrid(initialUrineGrid());
     setUrineAmountGrid(initialNumberGrid());
@@ -426,7 +440,7 @@ export default function MonitoringChartMVP() {
         <Card className="rounded-2xl shadow-sm p-2">
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-xl font-semibold">주야간 모니터링 입력</CardTitle>
+              <CardTitle className="text-xl font-semibold">BS monitoring helper</CardTitle>
               <Button variant="outline" className="h-9" onClick={handleReset}>
                 초기화
               </Button>
@@ -485,6 +499,7 @@ export default function MonitoringChartMVP() {
                 <CompactNumberRow label="체온" grid={tempGrid} setGrid={setTempGrid} />
                 <CompactNumberRow label="혈압" grid={bpGrid} setGrid={setBpGrid} />
                 <CompactNumberRow label="호흡수" grid={rrGrid} setGrid={setRrGrid} />
+                <CompactNumberRow label="혈당" grid={bgGrid} setGrid={setBgGrid} />
               </div>
             </div>
 
