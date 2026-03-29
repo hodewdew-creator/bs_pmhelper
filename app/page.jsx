@@ -186,6 +186,7 @@ export default function MonitoringChartMVP() {
 
   const [previewDraft, setPreviewDraft] = useState("");
   const [isDirty, setIsDirty] = useState(false);
+  const [copyDone, setCopyDone] = useState(false);
 
   const previewText = useMemo(() => {
     const lines = ["<주야간모니터링>"];
@@ -296,6 +297,8 @@ export default function MonitoringChartMVP() {
         document.execCommand('copy');
         document.body.removeChild(textarea);
       }
+      setCopyDone(true);
+      window.setTimeout(() => setCopyDone(false), 1500);
     } catch (e) {
       console.error(e);
     }
@@ -419,7 +422,7 @@ export default function MonitoringChartMVP() {
 
     return (
     <div key={resetKey} className="min-h-screen bg-slate-100 p-6 text-base text-slate-900 antialiased">
-      <div className="mx-auto grid max-w-[1600px] items-stretch gap-4 xl:grid-cols-[1.4fr_0.6fr]">
+      <div className="grid w-full items-start gap-4 xl:grid-cols-[minmax(0,1fr)_420px] 2xl:grid-cols-[minmax(0,1fr)_480px]">
         <Card className="rounded-2xl shadow-sm p-2">
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
@@ -779,32 +782,28 @@ export default function MonitoringChartMVP() {
           </div>
         )}
 
-        <Card className="rounded-2xl shadow-sm xl:min-h-full">
+        <Card className="rounded-2xl shadow-sm xl:min-w-0 xl:self-start">
           <CardHeader className="pb-3">
             <div className="flex flex-col gap-1">
               <CardTitle className="text-xl font-semibold">프리뷰 <span className="text-sm text-slate-600">(수동수정가능)</span></CardTitle>
             </div>
             <div className="mt-2">
               <Button
-                className="h-11 w-full text-base font-semibold"
-                onClick={async (e) => {
-                  await copyPreview();
-                  e.currentTarget.textContent = "COPY 완료";
-                  e.currentTarget.className = "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-red-500 text-white shadow hover:bg-red-500/90 h-9 w-full";
-                }}
+                className={`h-11 w-full text-base font-semibold ${copyDone ? "bg-blue-600 border-blue-600 hover:bg-blue-600" : ""}`}
+                onClick={copyPreview}
               >
-                COPY
+                {copyDone ? "COPY 완료" : "COPY"}
               </Button>
             </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="min-w-0">
             <Textarea
               value={previewDraft}
               onChange={(e) => {
                 setPreviewDraft(e.target.value);
                 setIsDirty(true);
               }}
-              className="min-h-[360px] md:min-h-[520px] xl:min-h-[980px] h-full font-mono text-sm leading-6 text-slate-900 whitespace-pre overflow-x-auto resize-none"
+              className="h-[420px] md:h-[520px] xl:h-[620px] w-full min-w-0 overflow-x-auto overflow-y-auto whitespace-pre resize-none font-mono text-sm leading-6 text-slate-900 [scrollbar-gutter:stable_both-edges]"
             />
           </CardContent>
         </Card>
