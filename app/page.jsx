@@ -800,7 +800,7 @@ export default function MonitoringChartMVP() {
         <Card className="rounded-2xl shadow-sm xl:min-w-0 xl:self-start">
           <CardHeader className="pb-3">
             <div className="flex flex-col gap-1">
-              <CardTitle className="text-xl font-semibold">프리뷰 <span className="text-sm text-slate-600">(수동수정가능)</span></CardTitle>
+              <CardTitle className="text-xl font-semibold">프리뷰 <span className="text-sm text-slate-600">(수동수정가능, BUT **수동수정 이후에는 좌측에서 추가입력 안됩니다**. )</span></CardTitle>
             </div>
             <div className="mt-2">
               <Button
